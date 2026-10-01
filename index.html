@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3e2723">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kedai Marave</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#FFFDE7;padding-bottom:90px;overflow-x:hidden}
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .6s cubic-bezier(.7,0,.3,1);background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)), url('https://i.imgur.com/nhuldDL.jpeg');background-size:cover;background-position:center;}
+#splash.hide{transform:translateY(-100%)}
+.logo-cover{width:145px;height:145px;border-radius:50%;background:#fff;border:5px solid #3e2723;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(255,235,59,0.35), 0 12px 30px rgba(0,0,0,.7);animation:pop .6s ease;overflow:hidden;padding:8px}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.splash-title{margin-top:18px;font-size:26px;font-weight:800;color:#FFEB3B;text-shadow:0 3px 0 #000, 0 4px 12px rgba(0,0,0,.9)}
+.splash-sub{font-size:12px;font-weight:600;color:#fff;margin-top:6px;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px;text-shadow:0 2px 6px #000}
+.header{background:#FFEB3B;padding:12px 16px 16px;border-radius:0 0 24px 24px;position:sticky;top:0;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.head-top{display:flex;justify-content:space-between;align-items:center}
+.head-logo{display:flex;align-items:center;gap:10px}
+.head-logo .bulat{width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #3e2723;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.15);overflow:hidden;padding:4px}
+.search{background:#fff;border-radius:24px;padding:12px 16px;display:flex;gap:8px;margin-top:12px;border:2.5px solid #3e2723}
+.search input{border:0;outline:0;width:100%;font-size:13px;font-weight:600}
+.cat-row{display:flex;gap:12px;padding:14px 16px}
+.cat{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.cat-icon{width:100%;height:62px;background:#fff;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;border:2.5px solid #FFEB3B;transition:.2s}
+.cat.active .cat-icon{background:#3e2723;border-color:#3e2723;transform:scale(1.05)}
+.cat p{font-size:12px;font-weight:700;color:#5D4037}
+.section{padding:0 16px;margin-top:14px}
+.row{display:flex;gap:10px;overflow:auto;padding:6px 2px 12px}
+.row::-webkit-scrollbar{display:none}
+.card{background:#fff;border-radius:18px;min-width:150px;max-width:150px;overflow:hidden;border:2px solid #FFF59D;cursor:pointer}
+.card img{width:100%;height:100px;object-fit:cover}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.item{background:#fff;border-radius:18px;padding:12px;display:flex;gap:12px;border:1.5px solid #FFF9C4;align-items:center}
+.item img{width:78px;height:78px;border-radius:14px;border:2px solid #FFEB3B;object-fit:cover;cursor:pointer}
+.btn-add{background:#3e2723;color:#FFEB3B;border:0;border-radius:22px;padding:9px 18px;font-weight:800;font-size:12px;min-width:86px;cursor:pointer}
+.tambah-box{background:#fff;border:2.5px dashed #FFCA28;border-radius:16px;padding:14px;margin-top:14px}
+.line{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dotted #eee;font-size:11px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 10px 14px;border-top:2.5px solid #FFEB3B;z-index:30;height:72px; align-items:flex-end;}
+.bottom div{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:#8D6E63;font-weight:600;cursor:pointer;transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);position:relative; top:0;padding:6px 18px; border-radius:20px;}
+.bottom div span{font-size:16px; margin-bottom:2px; transition:.3s}
+.bottom div.active{top:-22px;background:#3e2723;color:#FFEB3B;padding:10px 22px;border-radius:26px;box-shadow:0 10px 20px rgba(62,39,35,.35);transform:scale(1.1);font-weight:800;}
+.bottom div.active span{font-size:18px}
+.float{position:fixed;bottom:86px;right:16px;background:#3e2723;color:#FFEB3B;padding:14px 22px;border-radius:24px;display:none;font-weight:800;z-index:25;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.float.show{display:flex;gap:8px}
+.drawer{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
+.drawer.open{display:block}
+.panel{position:absolute;bottom:0;left:0;right:0;background:#FFFDE7;border-radius:24px 24px 0 0;padding:18px;max-height:84vh;overflow:auto}
+.kontak{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.kontak a{background:#fff;border:2.5px solid #FFEB3B;border-radius:18px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:#3e2723;font-size:10px;font-weight:800;text-align:center}
+.kontak img{width:32px;height:32px;object-fit:contain}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:22px;width:100%;max-width:360px;overflow:hidden;max-height:90vh;overflow-y:auto}
+.mimg{width:100%;height:190px;object-fit:cover}
+.check{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#FFF9C4;border-radius:14px;margin:8px 0;font-size:12px;font-weight:600;border:2px solid #FFEB3B}
+.qty-box{display:flex;gap:10px;align-items:center}
+.qty-btn{width:44px;height:44px;border-radius:50%;border:2px solid #3e2723;background:#3e2723;color:#FFEB3B;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.qty-btn.minus{background:#fff;color:#3e2723}
+.badge{background:#3e2723;color:#FFEB3B;padding:3px 10px;border-radius:12px;font-size:10px;margin-left:8px}
+</style>
+</head>
+<body>
+<div id="splash" onclick="closeSplash()">
+<div class="logo-cover"><img src="https://i.imgur.com/uqJqJI6.jpeg" style="width:100%;height:100%;object-fit:contain;border-radius:50%;background:#fff"></div>
+<div class="splash-title">KEDAI MARAVE</div>
+<div class="splash-sub">Singaraja, Bali • Halal • Murah Meriah</div>
+</div>
+<div class="header">
+  <div class="head-top">
+    <div class="head-logo">
+    <div class="bulat"><img src="https://i.imgur.com/uqJqJI6.jpeg" style="width:100%;height:100%;object-fit:contain;border-radius:50%;background:#fff"></div>
+      <div><div style="font-size:16px;font-weight:800;line-height:1">Kedai Marave</div><div style="font-size:11px;font-weight:600;opacity:.7">Singaraja, Bali</div></div>
+    </div>
+    <div style="background:#3e2723;color:#FFEB3B;padding:9px 16px;border-radius:24px;font-weight:800" onclick="toggleCart(true)">🛒 <span id="cartCount">0</span></div>
+  </div>
+  <div class="search"><span>🔍</span><input id="search" placeholder="Cari Mie, Seblak, Es..." oninput="doSearch()"></div>
+</div>
+<div class="cat-row">
+  <div class="cat active" id="cat-all" onclick="filterMenu('all')"><div class="cat-icon">🍜</div><p>Semua</p></div>
+  <div class="cat" id="cat-food" onclick="filterMenu('food')"><div class="cat-icon">🍛</div><p>Makanan</p></div>
+  <div class="cat" id="cat-drink" onclick="filterMenu('drink')"><div class="cat-icon">🥤</div><p>Minuman</p></div>
+</div>
+<div class="section" id="sec-pop"><h3 style="font-size:15px">🔥 Menu Terlaris <span id="badge" class="badge" style="display:none"></span></h3><div class="row" id="popRow"></div></div>
+<div class="section" id="sec-all"><h3 id="titleAll" style="font-size:14px">Semua Menu (20)</h3><div class="grid" id="gridAll"></div>
+<div class="tambah-box"><h4 style="font-size:13px">🍚 Tambahan</h4><div class="line"><span>Lontong</span><b>Rp 2.500</b></div><div class="line"><span>Nasi</span><b>Rp 4.000</b></div><h4 style="margin-top:10px;font-size:13px">🌶️ Level Seblak</h4><div class="line"><span>Level 1-2</span><b style="color:#2E7D32">Gratis</b></div><div class="line"><span>Level 3-4</span><b>Rp 1.000</b></div><h4 style="margin-top:10px;font-size:13px">🧋 Topping Minuman</h4><div class="line"><span>Boba / Oreo / Cincau</span><b>Rp 1.000</b></div><div class="line"><span>SKM / Keju</span><b>Rp 2.000</b></div></div>
+</div>
+
+<!-- LOKASI + SUASANA + ULASAN FOTO -->
+<div class="section" id="sec-loc" style="display:none"><h3>📍 Lokasi</h3>
+  <div style="background:#fff;border-radius:18px;overflow:hidden;margin-top:10px;border:2px solid #FFEB3B">
+    <iframe src="https://www.google.com/maps?q=KEDAI%20MARAVE%20Munduk%20Kunci%20Sukasada&z=18&output=embed" width="100%" height="280" style="border:0" loading="lazy"></iframe>
+    <div style="padding:14px;text-align:center">
+      <p style="font-size:12px;color:#5D4037;margin-bottom:10px">KEDAI MARAVE, Dusun Jl. Tegal Linggah, Munduk Kunci</p>
+      <a href="https://maps.app.goo.gl/UpjF4Rode2BdpN4z7?g_st=ac" target="_blank" style="background:#3e2723;color:#FFEB3B;padding:12px 22px;border-radius:22px;text-decoration:none;font-weight:800;display:inline-block">Buka Google Maps</a>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;background:#fff;border-radius:18px;padding:14px;border:2px solid #FFEB3B">
+    <h4 style="font-size:13px">📸 Suasana Kedai</h4>
+    <p style="font-size:11px;color:#8D6E63;margin-top:2px">Tempat nongkrong asik & bersih di Singaraja</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+      <img src="https://i.imgur.com/JJEfIja.jpeg" style="width:100%;height:120px;border-radius:12px;object-fit:cover;border:2px solid #FFEB3B">
+      <img src="https://i.imgur.com/t1qbdOH.jpeg" style="width:100%;height:120px;border-radius:12px;object-fit:cover;border:2px solid #FFEB3B">
+      <img src="https://i.imgur.com/x4jFZWJ.jpeg" style="width:100%;height:120px;border-radius:12px;object-fit:cover;border:2px solid #FFEB3B">
+      <img src="https://i.imgur.com/nhuldDL.jpeg" style="width:100%;height:120px;border-radius:12px;object-fit:cover;border:2px solid #3e2723">
+    </div>
+  </div>
+
+  <div style="margin-top:16px;background:#fff;border-radius:18px;padding:14px;border:2px solid #FFEB3B">
+    <h4 style="font-size:13px">⭐ Ulasan Pelanggan</h4>
+    <p style="font-size:11px;color:#8D6E63;margin-top:2px">Bukti asli dari pelanggan setia</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+      <img src="https://i.imgur.com/6jiFw39.jpeg" style="width:100%;border-radius:14px;border:2px solid #FFEB3B;object-fit:contain;background:#FFFDE7">
+      <img src="https://i.imgur.com/KDw7IDB.jpeg" style="width:100%;border-radius:14px;border:2px solid #FFEB3B;object-fit:contain;background:#FFFDE7">
+      <img src="https://i.imgur.com/OBFNgnb.jpeg" style="width:100%;border-radius:14px;border:2px solid #FFEB3B;object-fit:contain;background:#FFFDE7">
+    </div>
+    <a href="https://maps.app.goo.gl/UpjF4Rode2BdpN4z7?g_st=ac" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:11px;font-weight:800;color:#3e2723;text-decoration:none;background:#FFEB3B;padding:10px;border-radius:12px">✍️ Tulis ulasan di Google Maps →</a>
+  </div>
+</div>
+
+<div class="section" id="sec-kon" style="display:none"><h3>💬 Hubungi Kami</h3>
+<div class="kontak">
+<a href="https://wa.me/6281999567364" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">WhatsApp</a>
+<a href="https://www.instagram.com/kedaimarave" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">Instagram</a>
+<a href="https://www.tiktok.com/@kedai.marave" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046126.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span style="display:none;font-size:24px">🎵</span>TikTok</a>
+<a href="https://www.facebook.com/share/1EPzWFwSFc" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg">Facebook</a>
+</div>
+</div>
+<div class="float" id="floatCart" onclick="toggleCart(true)">🛒 <span id="fCount">0</span> • <span id="fPrice">Rp 0</span></div>
+<div class="drawer" id="drawer" onclick="toggleCart(false)"><div class="panel" onclick="event.stopPropagation()"><div style="display:flex;justify-content:space-between;align-items:center"><h3>🛒 Keranjang</h3><span style="font-size:28px;cursor:pointer" onclick="toggleCart(false)">✕</span></div><div id="cartList" style="margin-top:16px"></div><div style="border-top:3px dashed #FFCA28;margin-top:16px;padding-top:14px"><p style="font-size:14px">Total: <b id="cartTotal" style="font-size:18px">Rp 0</b></p><button onclick="checkoutWA()" style="width:100%;margin-top:14px;background:#25D366;color:#fff;border:0;padding:16px;border-radius:16px;font-weight:800;font-size:14px">Order via WhatsApp</button></div></div></div>
+<div class="modal" id="modal" onclick="closeModal()"><div class="mbox" onclick="event.stopPropagation()"><img id="mImg" class="mimg"><div style="padding:16px"><h3 id="mTitle"></h3><p id="mPrice" style="color:#BF360C;font-weight:800;margin-top:4px"></p><p id="mDesc" style="font-size:12px;color:#5D4037;margin-top:8px;white-space:pre-line"></p><div id="mAdd" style="margin-top:16px"></div><div style="display:flex;gap:12px;margin-top:18px"><button onclick="closeModal()" style="flex:1;padding:14px;border-radius:14px;border:2px solid #ccc;background:#fff;font-weight:700">Tutup</button><button id="mBtn" style="flex:1;padding:14px;border-radius:14px;border:0;background:#3e2723;color:#FFEB3B;font-weight:800">+ Tambah</button></div></div></div></div>
+<div class="bottom"><div class="active" id="nav-home" onclick="goHome()"><span>🏠</span>Beranda</div><div id="nav-loc" onclick="goPage('loc')"><span>📍</span>Lokasi</div><div id="nav-kon" onclick="goPage('kon')"><span>👤</span>Kontak</div></div>
+<script>
+const foods=[
+{name:"Mie Kuah / Goreng",price:6000,img:"https://i.imgur.com/Lnryroc.jpeg",cat:"food",desc:"Biasa 6k\n+ sayur 7k\n+ telur 8k\n+ sayur+telur 9k",adds:["lontong","nasi"]},
+{name:"Pentol Bumbu Kacang",price:5000,img:"https://i.imgur.com/Md8mi9r.jpeg",cat:"food",desc:"Minimal 5k - Pentol bumbu kacang",adds:["lontong","nasi"]},
+{name:"Aneka Dimsum",price:5000,img:"https://i.imgur.com/tiDDxx3.jpeg",cat:"food",desc:"Minimal 5k - Dimsum mayo",adds:["lontong","nasi"]},
+{name:"Tipat Cantok",price:7000,img:"https://i.imgur.com/TOUkY4R.jpeg",cat:"food",desc:"Bumbu kacang petis limau 7k",adds:["lontong","nasi"]},
+{name:"Mie Gelas",price:3000,img:"https://i.imgur.com/A8nIUNQ.jpeg",cat:"food",desc:"Mie gelas + pentol 3k",adds:["lontong","nasi"]},
+{name:"Aneka Panggangan",price:10000,img:"https://i.imgur.com/2Z9Regg.jpeg",cat:"food",desc:"Burger Mini 10k\nRoti Bakar 6k\nSosis Bakar 5k",adds:["lontong","nasi"]},
+{name:"Rujak Kuah Pindang",price:7000,img:"https://i.imgur.com/KsPLs9p.jpeg",cat:"food",desc:"Pindang 7k",adds:["lontong","nasi"]},
+{name:"Kentang Goreng",price:6000,img:"https://i.imgur.com/W1AnRGP.jpeg",cat:"food",desc:"Kentang mayo 6k",adds:[]},
+{name:"Seblak",price:10000,img:"https://i.imgur.com/AY0ESf2.jpeg",cat:"food",desc:"S 10k M 15k L 20k\nLevel 1-4",adds:["level","lontong","nasi"]},
+{name:"Pop Mie",price:5000,img:"https://i.imgur.com/RiQrV66.jpeg",cat:"food",desc:"Kecil 5k Besar 7k",adds:["lontong","nasi"]}
+];
+const drinks=[
+{name:"Es Sachet",price:3000,img:"https://i.imgur.com/nZ9o9kj.jpeg",cat:"drink",desc:"Susu 3k Milo 5k",adds:["topping","skm"]},
+{name:"Es Campur",price:5000,img:"https://i.imgur.com/K7lmNAR.jpeg",cat:"drink",desc:"Buah + susu 5k",adds:["topping","skm"]},
+{name:"Es Teh",price:4000,img:"https://i.imgur.com/ULQ3b3v.jpeg",desc:"Biasa 4k Jumbo 5k",adds:["topping","skm"]},
+{name:"Capcin",price:5000,img:"https://i.imgur.com/K9b81TY.jpeg",cat:"drink",desc:"Cappucino cincau 5k",adds:["topping","skm"]},
+{name:"Jus Buah",price:10000,img:"https://i.imgur.com/4G1LzkK.jpeg",cat:"drink",desc:"Mangga Alpukat dll 10k",adds:["topping","skm"]},
+{name:"Es Jeruk Peras",price:5000,img:"https://i.imgur.com/KmBK4kD.jpeg",cat:"drink",desc:"Jeruk peras 5k",adds:["topping","skm"]},
+{name:"Thai Tea",price:5000,img:"https://i.imgur.com/HLZEsUd.jpeg",cat:"drink",desc:"Thai Tea 5k",adds:["topping","skm"]},
+{name:"Es Kelapa",price:5000,img:"https://i.imgur.com/BV6c7FK.jpeg",cat:"drink",desc:"Biasa 5k Susu 6k",adds:["topping","skm"]},
+{name:"Pop Ice",price:3000,img:"https://i.imgur.com/fT8hh62.jpeg",cat:"drink",desc:"Kecil 3k Besar 5k",adds:["topping","skm"]},
+{name:"Minuman Panas",price:3000,img:"https://i.imgur.com/T3kJYjo.jpeg",cat:"drink",desc:"Kopi 3k ABC 4k",adds:["topping","skm"]}
+];
+const addon={lontong:{n:"Lontong",p:2500},nasi:{n:"Nasi",p:4000},level:{n:"Level 3-4",p:1000},topping:{n:"Boba/Oreo/Cincau",p:1000},skm:{n:"SKM/Keju",p:2000}};
+const all=[...foods,...drinks];
+const terlarisFood=["Seblak","Tipat Cantok","Pentol Bumbu Kacang"];
+const terlarisDrink=["Capcin","Jus Buah","Es Kelapa"];
+const terlarisAll=[...terlarisFood,...terlarisDrink];
+let cart=[],cur=null,sel=[];
+function renderPop(list,cat='all'){
+  let filterTerlaris;
+  if(cat==='food') filterTerlaris=all.filter(i=>terlarisFood.includes(i.name));
+  else if(cat==='drink') filterTerlaris=all.filter(i=>terlarisDrink.includes(i.name));
+  else filterTerlaris=terlarisAll.map(n=>all.find(i=>i.name===n)).filter(Boolean);
+  document.getElementById('popRow').innerHTML=filterTerlaris.map(i=>`<div class="card" onclick="openModal('${i.name}')"><img src="${i.img}"><div style="padding:10px"><b style="font-size:12px;display:block;height:32px;overflow:hidden">${i.name}</b><div style="color:#BF360C;font-weight:800;font-size:12px">Rp ${i.price.toLocaleString()}</div></div></div>`).join('');
+}
+function renderGrid(list){
+  document.getElementById('gridAll').innerHTML=list.map(i=>`<div class="item"><img src="${i.img}" onclick="openModal('${i.name}')"><div style="flex:1" onclick="openModal('${i.name}')"><b style="font-size:13px">${i.name}</b><p style="font-size:11px;color:#8D6E63">${i.desc.split('\n')[0]}</p><b style="color:#BF360C;font-size:12px">Rp ${i.price.toLocaleString()}</b></div><button class="btn-add" onclick="openModal('${i.name}')">+ Tambah</button></div>`).join('');
+}
+function filterMenu(c){document.querySelectorAll('.cat').forEach(e=>e.classList.remove('active'));document.getElementById('cat-'+c).classList.add('active');let list=c==='all'?all:all.filter(x=>x.cat===c);document.getElementById('badge').style.display=c==='all'?'none':'inline-block';document.getElementById('badge').innerText=c==='food'?'Makanan':c==='drink'?'Minuman':'';document.getElementById('titleAll').innerText=(c==='all'?'Semua Menu':c==='food'?'Makanan':'Minuman')+' ('+list.length+')';renderPop(list,c);renderGrid(list);}
+function doSearch(){let q=document.getElementById('search').value.toLowerCase();let f=all.filter(x=>x.name.toLowerCase().includes(q));renderPop(f,'all');renderGrid(f);}
+function goHome(){document.getElementById('sec-pop').style.display='block';document.getElementById('sec-all').style.display='block';document.getElementById('sec-loc').style.display='none';document.getElementById('sec-kon').style.display='none';document.querySelectorAll('.bottom div').forEach(d=>d.classList.remove('active'));document.getElementById('nav-home').classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function goPage(p){document.getElementById('sec-pop').style.display='none';document.getElementById('sec-all').style.display='none';document.getElementById('sec-loc').style.display=p==='loc'?'block':'none';document.getElementById('sec-kon').style.display=p==='kon'?'block':'none';document.querySelectorAll('.bottom div').forEach(d=>d.classList.remove('active'));document.getElementById('nav-'+p).classList.add('active');}
+function openModal(n){let it=all.find(m=>m.name===n);cur=it;sel=[];document.getElementById('mImg').src=it.img;document.getElementById('mTitle').innerText=it.name;document.getElementById('mPrice').innerText='Rp '+it.price.toLocaleString();document.getElementById('mDesc').innerText=it.desc;let h='';if(it.adds.length){h+='<b style="font-size:13px">Tambahan / Topping</b>';it.adds.forEach(a=>{if(a==='level')h+=`<label class="check"><span>🌶️ Level 3-4</span><span><b>+1k</b> <input type="checkbox" value="level" onchange="toggleAdd(this)"></span></label>`;else if(a==='lontong')h+=`<label class="check"><span>🍚 Lontong</span><span><b>+2,5k</b> <input type="checkbox" value="lontong" onchange="toggleAdd(this)"></span></label>`;else if(a==='nasi')h+=`<label class="check"><span>🍚 Nasi</span><span><b>+4k</b> <input type="checkbox" value="nasi" onchange="toggleAdd(this)"></span></label>`;else if(a==='topping')h+=`<label class="check"><span>🧋 Boba / Oreo</span><span><b>+1k</b> <input type="checkbox" value="topping" onchange="toggleAdd(this)"></span></label>`;else if(a==='skm')h+=`<label class="check"><span>🥛 SKM / Keju</span><span><b>+2k</b> <input type="checkbox" value="skm" onchange="toggleAdd(this)"></span></label>`;});}document.getElementById('mAdd').innerHTML=h;document.getElementById('mBtn').onclick=()=>addWithTopping();document.getElementById('modal').classList.add('open');}
+function toggleAdd(el){if(el.checked)sel.push(el.value);else sel=sel.filter(x=>x!==el.value);let base=cur.price;let ex=sel.reduce((s,a)=>s+(addon[a]?.p||0),0);document.getElementById('mPrice').innerText='Rp '+(base+ex).toLocaleString()+(ex?' (+'+ex.toLocaleString()+')':'');}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function addWithTopping(){let base=cur.price;let ex=sel.reduce((s,a)=>s+(addon[a]?.p||0),0);let names=sel.map(a=>addon[a].n).join(', ');let k=cur.name+'|'+sel.sort().join(',');let e=cart.find(c=>c.k===k);if(e)e.q++;else cart.push({k:k,name:cur.name,price:base+ex,img:cur.img,q:1,sel:sel,selN:names});updateCart();closeModal();}
+function updateCart(){let count=cart.reduce((a,b)=>a+b.q,0);let total=cart.reduce((a,b)=>a+b.price*b.q,0);document.getElementById('cartCount').innerText=count;document.getElementById('fCount').innerText=count;document.getElementById('fPrice').innerText='Rp '+total.toLocaleString();document.getElementById('cartTotal').innerText='Rp '+total.toLocaleString();document.getElementById('cartList').innerHTML=cart.map(c=>`<div style="display:flex;gap:12px;background:#fff;padding:14px;border-radius:16px;margin-bottom:10px;align-items:center"><img src="${c.img}" style="width:56px;height:56px;border-radius:12px;object-fit:cover"><div style="flex:1"><b style="font-size:13px">${c.name}</b>${c.selN?`<br><span style="font-size:11px;color:#8D6E63">+ ${c.selN}</span>`:''}<br><span style="font-size:12px;font-weight:600">${c.q} x Rp ${c.price.toLocaleString()}</span></div><div class="qty-box"><div class="qty-btn minus" onclick="changeQty('${c.k}',-1)">−</div><div class="qty-btn" onclick="changeQty('${c.k}',1)">+</div></div></div>`).join('')||'<p style="padding:20px;text-align:center;color:#999">Keranjang kosong</p>';document.getElementById('floatCart').classList.toggle('show',count>0);}
+function changeQty(k,d){let c=cart.find(x=>x.k===k);if(!c)return;c.q+=d;if(c.q<=0)cart=cart.filter(x=>x.k!==k);updateCart();}
+function toggleCart(o){document.getElementById('drawer').classList.toggle('open',o)}
+function checkoutWA(){if(!cart.length)return alert('Keranjang kosong');let t='Halo Kedai Marave! Mau pesan:%0A';cart.forEach(c=>{t+=`- ${c.name} ${c.selN?`(+${c.selN})`:''} x${c.q} = Rp ${(c.price*c.q).toLocaleString()}%0A`});t+=`%0ATotal: ${document.getElementById('cartTotal').innerText}`;window.open('https://wa.me/6281999567364?text='+t,'_blank');}
+function closeSplash(){document.getElementById('splash').classList.add('hide');}
+setTimeout(closeSplash,2200);
+renderPop(all,'all');renderGrid(all);
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
+</body>
+  </html>
