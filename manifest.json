@@ -1,19 +1,19 @@
 {
-  "name": "KEDAI MARAVE",
-  "short_name": "MARAVE",
-  "description": "Kedai Marave - Singaraja, Bali - Halal & Murah Meriah",
-  "start_url": "./index.html",
+  "name": "Kedai Marave",
+  "short_name": "Marave",
+  "description": "Singaraja, Bali - Halal Murah Meriah",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#3e2723",
-  "theme_color": "#3e2723",
+  "background_color": "#FFF8DC",
+  "theme_color": "#FFD700",
   "icons": [
     {
-      "src": "icons/Icon-192.png",
+      "src": "icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/Icon-512.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
